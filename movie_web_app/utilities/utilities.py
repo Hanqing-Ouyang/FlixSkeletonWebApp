@@ -19,8 +19,6 @@ utilities_blueprint = Blueprint(
 
 
 def get_selected_movies(quantity=3):
-    articles = services.get_random_movies(quantity, repo.repo_instance)
+    movies = services.get_random_movies(quantity, repo.repo_instance)
 
-    for article in articles:
-        article['hyperlink'] = url_for('news_bp.articles_by_date', date=article['date'].isoformat())
-    return articles
+    return movies
