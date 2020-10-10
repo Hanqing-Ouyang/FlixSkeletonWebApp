@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main  id="main">
+    <table>
+        <tr>
+            <th>director_full_name</th>
+        </tr>
+        {% for director in directors %}
+            <tr>
+                <td>{{ director.director_full_name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</main>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <table>
+        <tr>
+            <th>genre_type</th>
+        </tr>
+        {% for genre in genres %}
+            <tr>
+                <td>{{ genre.genre_name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</main>
+
+{% endblock %}
