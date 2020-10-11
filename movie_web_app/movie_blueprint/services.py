@@ -1,10 +1,10 @@
 from typing import List, Iterable
 
 from movie_web_app.adapters.repository import AbstractRepository
-from movie_web_app.domainmodel.user import User
+from movie_web_app.domainmodel.model import User,Review,Movie ,make_review
 from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.movie import Movie
-from movie_web_app.domainmodel.review import Review
+# from movie_web_app.domainmodel.movie import
+# from movie_web_app.domainmodel.review import Review
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
 import movie_web_app.adapters.repository as repo
@@ -29,8 +29,7 @@ def add_review(movie_id: int, review_text: str, username: str, repo: AbstractRep
         raise UnknownUserException
 
     # Create review.
-    review = Review(movie, review_text)
-    user.add_review(review)
+    review = make_review(review_text, user, movie)
 
     # Upyear the repository.
     repo.add_review(review)

@@ -1,7 +1,7 @@
 from movie_web_app.domainmodel.genre import Genre
 from movie_web_app.domainmodel.actor import Actor
 from movie_web_app.domainmodel.director import Director
-
+# from movie_web_app.domainmodel.user import Review
 
 class Movie:
     pass
@@ -156,14 +156,14 @@ class Movie:
             if genre in self._genres:
                 self._genres.remove(genre)
 
-    def add_review(self,review:str):
-        if isinstance(review, str):
-            self._reviews.append(review)
-
-    def remove_review(self,review:str):
-        if isinstance(review, str):
-            if review in self._reviews:
-                self._reviews.remove(review)
+    # def add_review(self,review:Review):
+    #     if isinstance(review, Review):
+    #         self._reviews.append(review)
+    #
+    # def remove_review(self,review:Review):
+    #     if isinstance(review, Review):
+    #         if review in self._reviews:
+    #             self._reviews.remove(review)
 
 
 class TestMovieMethods:

@@ -6,12 +6,12 @@ from datetime import datetime
 from bisect import bisect, bisect_left, insort_left
 from werkzeug.security import generate_password_hash
 
-from movie_web_app.domainmodel.movie import Movie
+# from movie_web_app.domainmodel.movie import Movie
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
 from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.user import User
-from movie_web_app.domainmodel.review import Review
+from movie_web_app.domainmodel.model import User,Review,Movie,make_review
+# from movie_web_app.domainmodel.review import Review
 from movie_web_app.adapters.repository import AbstractRepository, RepositoryException
 from movie_web_app.datafilereaders.movie_file_csv_reader import MovieFileCSVReader
 
@@ -246,7 +246,7 @@ def read_csv_file(filename: str):
 def load_users(data_path: str, repo: MainRepository):
     users = dict()
 
-    for data_row in read_csv_file(os.path.join(data_path, 'users.csv')):
+    for data_row in read_csv_file(data_path + '/users.csv'):
         user = User(
             user_name=data_row[1],
             password=generate_password_hash(data_row[2])
@@ -256,14 +256,13 @@ def load_users(data_path: str, repo: MainRepository):
     return users
 
 def load_reviews(data_path: str, repo: MainRepository, users):
-    for data_row in read_csv_file(os.path.join(data_path, 'comments.csv')):
-        review = Review(
+    for data_row in read_csv_file(os.path.join(data_path,'comments.csv')):
+        review = make_review(
             review_text=data_row[3],
+            user=users[data_row[1]],
             movie=repo.get_movie(int(data_row[2])),
+            timestamp=datetime.fromisoformat(data_row[4])
         )
-        review.timestamp=datetime.fromisoformat(data_row[4])
-        user = users[data_row[1]]
-        user.add_review(review)
 
         repo.add_review(review)
         

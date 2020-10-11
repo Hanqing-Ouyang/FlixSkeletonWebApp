@@ -3,12 +3,12 @@ from typing import List
 
 import pytest
 
-from movie_web_app.domainmodel.movie import Movie
+# from movie_web_app.domainmodel.movie import
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
 from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.user import User
-from movie_web_app.domainmodel.review import Review
+from movie_web_app.domainmodel.model import User,Review, make_review, Movie
+# from movie_web_app.domainmodel.review import
 from movie_web_app.adapters.repository import RepositoryException
 
 
@@ -204,14 +204,10 @@ def test_repository_can_get_last_movie(in_movie_repo):
     assert movie.title == 'Nine Lives'
 
     
-    
 def test_repository_can_add_a_review(in_movie_repo):
     user = in_movie_repo.get_user('thorke')
     movie = in_movie_repo.get_movie(2)
-    review = Review(movie,"Trump's onto it!")
-    review.timestamp= datetime.today()
-    user.add_review(review)
-
+    review = make_review("Trump's onto it!", user, movie)
 
     in_movie_repo.add_review(review)
 
@@ -220,11 +216,7 @@ def test_repository_can_add_a_review(in_movie_repo):
 
 def test_repository_does_not_add_a_review_without_a_user(in_movie_repo):
     movie = in_movie_repo.get_movie(2)
-    user=User("None","1234")
-    review = Review(movie, "Trump's onto it!")
-    user.add_review(review)
-    review.timestamp= datetime.today()
-
+    review = Review(movie, None, "Trump's onto it!", datetime.today())
 
     with pytest.raises(RepositoryException):
         in_movie_repo.add_review(review)
@@ -233,11 +225,9 @@ def test_repository_does_not_add_a_review_without_a_user(in_movie_repo):
 def test_repository_does_not_add_a_review_without_an_movie_properly_attached(in_movie_repo):
     user = in_movie_repo.get_user('thorke')
     movie = in_movie_repo.get_movie(2)
-    review = Review(movie, "Trump's onto it!")
-    user.add_review(review)
-    review.timestamp = datetime.today()
+    review = Review(None, movie, "Trump's onto it!", datetime.today())
 
-    # user.add_review(review)
+    user.add_review(review)
 
     with pytest.raises(RepositoryException):
         # Exception expected because the movie doesn't refer to the review.
@@ -245,7 +235,6 @@ def test_repository_does_not_add_a_review_without_an_movie_properly_attached(in_
 
 
 def test_repository_can_retrieve_reviews(in_movie_repo):
-    assert len(in_movie_repo.get_reviews()) == 2
-
+    assert len(in_movie_repo.get_reviews()) == 3
 
 

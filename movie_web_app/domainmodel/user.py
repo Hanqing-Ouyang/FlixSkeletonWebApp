@@ -1,5 +1,11 @@
 from movie_web_app.domainmodel.movie import Movie
 from movie_web_app.domainmodel.review import Review
+from datetime import datetime
+from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.actor import Actor
+from movie_web_app.domainmodel.director import Director
+from typing import List, Iterable
+
 
 
 class User:
@@ -89,25 +95,8 @@ class User:
         if isinstance(review, Review):
             self._reviews.append(review)
 
-    def remove_review(self,comment:str,movie:Movie):
+    def remove_review(self,review:str,movie:Movie):
         for i in self._reviews:
-            if (i._review_text== comment) and (i._movie== movie):
+            if (i._review_text== review) and (i._movie== movie):
                 self._reviews.remove(i)
 
-
-class TestuserMethods:
-
-    def test_init(self):
-        # test User
-        user1 = User('Martin', 'pw12345')
-        user2 = User('Ian', 'pw67890')
-        user3 = User('Daniel', 'pw87465')
-        print(user1)
-        assert repr(
-            user1) == "<User martin>"
-        print(user2)
-        assert repr(
-            user2) == "<User ian>"
-        print(user3)
-        assert repr(
-            user3) == "<User daniel>"

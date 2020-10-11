@@ -1,9 +1,9 @@
 import abc
 from typing import List
-from movie_web_app.domainmodel.user import User
+from movie_web_app.domainmodel.model import User,Review,make_review,Movie
 from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.movie import Movie
-from movie_web_app.domainmodel.review import Review
+# from movie_web_app.domainmodel.movie import
+# from movie_web_app.domainmodel.review import
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
 
@@ -118,10 +118,10 @@ class AbstractRepository(abc.ABC):
         If the Comment doesn't have bidirectional links with an Article and a User, this method raises a
         RepositoryException and doesn't update the repository.
         """
-        # if review.user is None or review not in review.user.reviews:
-        #     raise RepositoryException('Comment not correctly attached to a User')
-        # if review.movie is None or review not in review.movie.reviews:
-        #     raise RepositoryException('Comment not correctly attached to an Movie')
+        if review.user is None or review not in review.user.reviews:
+            raise RepositoryException('Comment not correctly attached to a User')
+        if review.movie is None or review not in review.movie.reviews:
+            raise RepositoryException('Comment not correctly attached to an Movie')
 
     @abc.abstractmethod
     def get_number_of_movies(self):
@@ -162,13 +162,6 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
 
-    @abc.abstractmethod
-    def get_movie_ids_for_genre(self, genre_name: str):
-        """ Returns a list of ids representing Articles that are tagged by tag_name.
-
-        If there are Articles that are tagged by tag_name, this method returns an empty list.
-        """
-        raise NotImplementedError
 
     @abc.abstractmethod
     def get_movies_by_year(self, target_date: int) -> List[Movie]:

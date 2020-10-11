@@ -35,7 +35,7 @@
         </nav>
 
     {% for movie in movies %}
-    <article id="movie">
+    <movie id="movie">
 <!--        <img src={{movie.image_hyperlink}} alt="movie image">-->
 
         <h2>{{movie.title}}</h2>
@@ -46,7 +46,7 @@
             {% endfor %}
         </div>
         <div style="float:right">
-            {% if movie.reviews|length > 0 and article.id != show_reviews_for_movie %}
+            {% if movie.reviews|length > 0 and movie.id != show_reviews_for_movie %}
                 <button class="btn-general" onclick="location.href='{{ movie.view_review_url }}'">{{ movie.reviews|length }} reviews</button>
             {% endif %}
             <button class="btn-general" onclick="location.href='{{ movie.add_review_url }}'">Review</button>
@@ -58,7 +58,7 @@
             {% endfor %}
         </div>
         {% endif %}
-    </article>
+    </movie>
     {% endfor %}
 
     <footer>

@@ -1,5 +1,5 @@
 import csv
-from movie_web_app.domainmodel.movie import Movie
+from movie_web_app.domainmodel.model import Movie
 from movie_web_app.domainmodel.actor import Actor
 from movie_web_app.domainmodel.genre import Genre
 from movie_web_app.domainmodel.director import Director
@@ -22,7 +22,7 @@ class MovieFileCSVReader:
                 index += 1
 
     @property
-    def dataset_of_movies(self) -> list():
+    def dataset_of_movies(self) -> list:
         with open(self.__file_name, mode='r', encoding='utf-8-sig') as csvfile:
             movie_file_reader = csv.DictReader(csvfile)
             index = 0

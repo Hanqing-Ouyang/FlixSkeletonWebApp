@@ -8,10 +8,9 @@ import movie_web_app.adapters.movie_repository as mv_repo
 from movie_web_app.datafilereaders.movie_file_csv_reader import MovieFileCSVReader
 
 
-TEST_DATA_PATH = os.path.join('C:', os.sep, 'Users', 'Yuezheng', 'Desktop', '235', 'CS235FlixSkeleton-master',
-                              'CS235FlixSkeleton-master','movie_web_app', 'tests', 'data')
+# TEST_DATA_PATH = os.path.join('C:', os.sep, 'iCloud Drive', 'Documents', 'GitHub', 'FlixSkeletonWebApp','movie_web_app', 'tests', 'data')
 #TEST_DATA_PATH = os.path.join('C:', os.sep, 'Users', 'iwar006', 'Documents', 'Python dev', 'COVID-19', 'tests', 'data')
-
+TEST_DATA_PATH = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/tests/data'
 
 @pytest.fixture
 def in_movie_repo():
@@ -32,7 +31,11 @@ def in_movie_repo():
 
 @pytest.fixture
 def client():
-    my_app = create_app()
+    my_app = create_app({
+        'TESTING': True,  # Set to True during testing.
+        'TEST_DATA_PATH': TEST_DATA_PATH,  # Path for loading test data into the repository.
+        'WTF_CSRF_ENABLED': False  # test_client will not send a CSRF token, so disable validation.
+    })
 
     return my_app.test_client()
 
