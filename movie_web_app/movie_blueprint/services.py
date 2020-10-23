@@ -3,10 +3,6 @@ from typing import List, Iterable
 from movie_web_app.adapters.repository import AbstractRepository
 from movie_web_app.domainmodel.model import User,Review,Movie ,make_review
 from movie_web_app.domainmodel.genre import Genre
-# from movie_web_app.domainmodel.movie import
-# from movie_web_app.domainmodel.review import Review
-from movie_web_app.domainmodel.director import Director
-from movie_web_app.domainmodel.actor import Actor
 import movie_web_app.adapters.repository as repo
 
 
@@ -20,17 +16,18 @@ class UnknownUserException(Exception):
 
 def add_review(movie_id: int, review_text: str, username: str, repo: AbstractRepository):
     # Check that the movie exists.
-    movie = repo.get_movie(movie_id)
+    movie = repo.get_movie(int(movie_id))
     if movie is None:
         raise NonExistentmovieException
 
     user = repo.get_user(username)
+    # print("movie_user", user)
     if user is None:
         raise UnknownUserException
 
     # Create review.
     review = make_review(review_text, user, movie)
-
+    # print("movie_user2", review)
     # Upyear the repository.
     repo.add_review(review)
 
@@ -123,7 +120,7 @@ def movies_to_dict(movies: Iterable[Movie]):
 
 def review_to_dict(review: Review):
     review_dict = {
-        'username': review.movie.title,
+        'username': review.user.user_name,
         'movie_id': review.rating,
         'review_text': review.review_text,
         'timestamp': review.timestamp

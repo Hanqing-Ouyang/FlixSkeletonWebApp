@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for
-
+import movie_web_app.utilities.utilities as utilities
 
 home_blueprint = Blueprint(
     'home_bp', __name__)
@@ -16,4 +16,5 @@ def home():
         list_genre_url=url_for('genre_bp.list_genre'),
         search_url=url_for('search_bp.find_movie'),
         register_url=url_for('authentication_bp.register'),
+        selected_movies=utilities.get_selected_movies(),
     )

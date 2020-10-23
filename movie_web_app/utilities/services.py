@@ -1,12 +1,8 @@
 from typing import Iterable
 import random
 
-import movie_web_app.adapters.movie_repository as mv_repo
-import movie_web_app.adapters.actor_repository as ac_repo
-import movie_web_app.adapters.director_repository as dr_repo
-import movie_web_app.adapters.genre_repository as gr_repo
 from movie_web_app.adapters.repository import AbstractRepository
-from movie_web_app.domainmodel.movie import Movie
+from movie_web_app.A1Files.movie import Movie
 
 
 def get_genre_names(repo: AbstractRepository):

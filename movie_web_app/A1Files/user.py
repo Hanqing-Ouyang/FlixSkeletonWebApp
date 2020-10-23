@@ -1,11 +1,5 @@
-from movie_web_app.domainmodel.movie import Movie
-from movie_web_app.domainmodel.review import Review
-from datetime import datetime
-from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.director import Director
-from typing import List, Iterable
-
+from movie_web_app.A1Files.movie import Movie
+from movie_web_app.domainmodel.model import Review
 
 
 class User:

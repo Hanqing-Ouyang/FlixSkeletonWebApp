@@ -168,22 +168,22 @@ img {
     border-bottom: 1px solid #e0e4e8;
 }
 
-#article-header {
+#movie-header {
     text-align: left;
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-#article {
+#movie {
     clear:both;
     margin-bottom:100px;
 }
 
-#article-footer {
+#movie-footer {
     font-size: 32px;
 }
 
-#article-container {
+#movie-container {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -261,3 +261,4 @@ input[type='submit']:hover {
 #pages ul li a:hover {
   background-color: #111111;
 }
+

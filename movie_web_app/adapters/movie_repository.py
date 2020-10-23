@@ -33,6 +33,9 @@ class MainRepository(AbstractRepository):
         self._current = 0
         return self
 
+    def get_users(self):
+        return self._users
+
     def __next__(self):
         if self._current >= len(self._movies):
             raise StopIteration
@@ -121,8 +124,12 @@ class MainRepository(AbstractRepository):
 
     def add_user(self, user: User):
         self._users.append(user)
+        print(user)
+        print(self._users)
 
     def get_user(self, username) -> User:
+        print(username)
+        print("get_user",next((user for user in self._users if user.user_name == username.lower()), None))
         return next((user for user in self._users if user.user_name == username.lower()), None)
 
     def add_users(self, users:list):

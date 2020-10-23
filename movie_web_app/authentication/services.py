@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from movie_web_app.adapters.repository import AbstractRepository
-from movie_web_app.domainmodel.user import User
+from movie_web_app.A1Files.user import User
 
 
 class NameNotUniqueException(Exception):
@@ -28,6 +28,7 @@ def add_user(username: str, password: str, repo: AbstractRepository):
     # Create and store the new User, with password encrypted.
     user = User(username, password_hash)
     repo.add_user(user)
+
 
 
 def get_user(username: str, repo: AbstractRepository):

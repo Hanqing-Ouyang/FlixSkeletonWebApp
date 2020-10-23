@@ -5,7 +5,7 @@ import movie_web_app.adapters.repository as repo
 import movie_web_app.adapters.movie_repository as mv_repo
 
 from movie_web_app.domainmodel import model
-from movie_web_app.domainmodel.user import User
+# from movie_web_app.domainmodel.user import User
 from movie_web_app.datafilereaders.movie_file_csv_reader import MovieFileCSVReader
 from movie_web_app.domainmodel.read_title import read_title
 
@@ -42,7 +42,7 @@ def create_app(test_config=None):
         from .authentication import authentication
         app.register_blueprint(authentication.authentication_blueprint)
 
-    filename = 'movie_web_app/datafiles/Data1000Movies.csv'
+    filename = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/datafiles/Data1000Movies.csv'
     movie_file_reader = MovieFileCSVReader(filename)
     repo.repo_instance = mv_repo.MainRepository()
     repo.repo_instance.add_movies(movie_file_reader.dataset_of_movies)

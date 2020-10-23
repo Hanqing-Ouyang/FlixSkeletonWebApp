@@ -1,5 +1,5 @@
 from datetime import datetime
-from movie_web_app.domainmodel.movie import Movie
+from movie_web_app.A1Files.movie import Movie
 
 class Review:
 
@@ -17,6 +17,7 @@ class Review:
 
         self._rating = None
         self._timestamp = datetime.now()
+
 
     @property
     def movie(self) -> "Movie":

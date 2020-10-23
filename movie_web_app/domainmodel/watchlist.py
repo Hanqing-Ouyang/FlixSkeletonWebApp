@@ -1,4 +1,4 @@
-from movie_web_app.domainmodel.movie import Movie
+from movie_web_app.A1Files.movie import Movie
 
 class WatchList:
     def __init__(self):

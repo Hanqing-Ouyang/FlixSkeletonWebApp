@@ -87,7 +87,7 @@ def movies_by_year():
         if previous_year is not None:
             # There are movies on a previous year, so generate URLs for the 'previous' and 'first' navigation buttons.
             prev_movie_url = url_for('movie_bp.movies_by_year', year=previous_year)
-            first_movie_url = url_for('movie_bp.movies_by_year', year=first_movie['year'])
+            first_movie_url = url_for('movie_bp.movies_by_year', year=2006)
 
         # There are movies on a subsequent year, so generate URLs for the 'next' and 'last' navigation buttons.
         if next_year is not None:
@@ -105,13 +105,13 @@ def movies_by_year():
             title='movies',
             movies_title=target_year,
             movies=movies,
-            selected_movies=utilities.get_selected_movies(len(movies) * 2),
+            selected_movies=utilities.get_selected_movies(6),
             genre_urls=url_for('genre_bp.list_genre'),
             first_movie_url=first_movie_url,
             last_movie_url=last_movie_url,
             prev_movie_url=prev_movie_url,
             next_movie_url=next_movie_url,
-            show_reviews_for_movie=movie_to_show_reviews
+            show_reviews_for_movie=movie_to_show_reviews,
         )
 
     # No movies to show, so return the homepage.
@@ -183,7 +183,7 @@ def movies_by_genre():
         last_movie_url=last_movie_url,
         prev_movie_url=prev_movie_url,
         next_movie_url=next_movie_url,
-        show_reviews_for_movie=movie_to_show_reviews
+        show_reviews_for_movie=movie_to_show_reviews,
     )
 
 

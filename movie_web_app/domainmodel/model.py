@@ -214,6 +214,13 @@ class Movie:
     def reviews(self, reviews:Iterable['Review']):
         self._reviews = reviews
 
+    def number_of_genres(self) -> int:
+        return len(self._genres)
+
+
+    def number_of_reviews(self) -> int:
+        return len(self._reviews)
+
     def add_actor(self, actor: Actor):
         if isinstance(actor, Actor):
             self._actors.append(actor)
@@ -275,10 +282,7 @@ class Review:
         else:
             self._review_text = None
 
-        if isinstance(user, User):
-            self._user = user
-        else:
-            self._user = None
+        self._user = user
 
         self._rating = None
         if isinstance(timestamp, datetime):
@@ -301,8 +305,7 @@ class Review:
 
     @user.setter
     def user(self, user):
-        if isinstance(user, User):
-            self._user = user
+        self._user = user
 
     @property
     def rating(self) -> int:

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, request
-
+import movie_web_app.utilities.utilities as utilities
 from flask_paginate import Pagination
 from flask_paginate import Pagination, get_page_parameter
 from movie_web_app.domainmodel.read_title import read_title
@@ -23,5 +23,6 @@ def list_genre():
         list_genre_url=url_for('genre_bp.list_genre'),
         search_url=url_for('search_bp.find_movie'),
         register_url=url_for('authentication_bp.register'),
-        genres=repo.repo_instance.get_genres()
+        genres=repo.repo_instance.get_genres(),
+        selected_movies=utilities.get_selected_movies(),
     )

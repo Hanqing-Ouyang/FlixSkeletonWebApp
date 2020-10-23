@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% import 'others/pages.html' as pg %}
 
 {% block content %}
 
@@ -13,6 +14,9 @@
             </tr>
         {% endfor %}
     </table>
+        <div class="pages">
+            {{pagination.links}}
+        </div>
 </main>
 
 {% endblock %}

@@ -69,7 +69,7 @@ def test_can_add_review(in_movie_repo):
 
 
 def test_cannot_add_review_for_non_existent_movie(in_movie_repo):
-    movie_id = 7
+    movie_id = 1001
     review_text = "COVID-19 - what's that?"
     username = 'fmercury'
 
@@ -94,21 +94,17 @@ def test_can_get_movie(in_movie_repo):
     movie_as_dict = news_services.get_movie(movie_id, in_movie_repo)
 
     assert movie_as_dict['id'] == movie_id
-    assert movie_as_dict['year'] == date.fromisoformat('2020-02-29')
-    assert movie_as_dict['title'] == 'Covid 19 coronavirus: US deaths double in two days, Trump says quarantine not necessary'
+    assert movie_as_dict['year'] == 2012
+    assert movie_as_dict['title'] == 'Prometheus'
     #assert movie_as_dict['first_para'] == 'US President Trump tweeted on Saturday night (US time) that he has asked the Centres for Disease Control and Prevention to issue a ""strong Travel Advisory"" but that a quarantine on the New York region"" will not be necessary.'
-    assert movie_as_dict['hyperlink'] == 'https://www.nzherald.co.nz/world/news/movie.cfm?c_id=2&objectid=12320699'
-    assert movie_as_dict['image_hyperlink'] == 'https://www.nzherald.co.nz/resizer/159Vi4ELuH2fpLrv1SCwYLulzoM=/620x349/smart/filters:quality(70)/arc-anglerfish-syd-prod-nzme.s3.amazonaws.com/public/XQOAY2IY6ZEIZNSW2E3UMG2M4U.jpg'
     assert len(movie_as_dict['reviews']) == 0
 
-    tag_names = [dictionary['name'] for dictionary in movie_as_dict['tags']]
-    assert 'World' in tag_names
-    assert 'Health' in tag_names
-    assert 'Politics' in tag_names
+    genre_names = [dictionary['name'] for dictionary in movie_as_dict['genres']]
+    assert len(genre_names) == 3
 
 
 def test_cannot_get_movie_with_non_existent_id(in_movie_repo):
-    movie_id = 7
+    movie_id = 7000
 
     # Call the service layer to attempt to retrieve the movie.
     with pytest.raises(news_services.NonExistentmovieException):
@@ -124,40 +120,40 @@ def test_get_first_movie(in_movie_repo):
 def test_get_last_movie(in_movie_repo):
     movie_as_dict = news_services.get_last_movie(in_movie_repo)
 
-    assert movie_as_dict['id'] == 6
+    assert movie_as_dict['id'] == 1000
 
 
 def test_get_movies_by_year_with_one_year(in_movie_repo):
-    target_year = date.fromisoformat('2020-02-28')
+    target_year = 2007
 
     movies_as_dict, prev_year, next_year = news_services.get_movies_by_year(target_year, in_movie_repo)
 
-    assert len(movies_as_dict) == 1
-    assert movies_as_dict[0]['id'] == 1
+    assert len(movies_as_dict) == 53
+    assert movies_as_dict[0]['id'] == 40
 
-    assert prev_year is None
-    assert next_year == date.fromisoformat('2020-02-29')
+    assert prev_year == 2006
+    assert next_year == 2008
 
 
 def test_get_movies_by_year_with_multiple_years(in_movie_repo):
-    target_year = date.fromisoformat('2020-03-01')
+    target_year = 2010
 
     movies_as_dict, prev_year, next_year = news_services.get_movies_by_year(target_year, in_movie_repo)
 
     # Check that there are 3 movies yeard 2020-03-01.
-    assert len(movies_as_dict) == 3
+    assert len(movies_as_dict) == 60
 
     # Check that the movie ids for the the movies returned are 3, 4 and 5.
     movie_ids = [movie['id'] for movie in movies_as_dict]
-    assert set([3, 4, 5]).issubset(movie_ids)
+    assert set([81, 139, 220]).issubset(movie_ids)
 
     # Check that the years of movies surrounding the target_year are 2020-02-29 and 2020-03-05.
-    assert prev_year == date.fromisoformat('2020-02-29')
-    assert next_year == date.fromisoformat('2020-03-05')
+    assert prev_year == 2009
+    assert next_year == 2011
 
 
 def test_get_movies_by_year_with_non_existent_year(in_movie_repo):
-    target_year = date.fromisoformat('2020-03-06')
+    target_year = 2020
 
     movies_as_dict, prev_year, next_year = news_services.get_movies_by_year(target_year, in_movie_repo)
 
@@ -170,7 +166,7 @@ def test_get_movies_by_id(in_movie_repo):
     movies_as_dict = news_services.get_movies_by_id(target_movie_ids, in_movie_repo)
 
     # Check that 2 movies were returned from the query.
-    assert len(movies_as_dict) == 2
+    assert len(movies_as_dict) == 4
 
     # Check that the movie ids returned were 5 and 6.
     movie_ids = [movie['id'] for movie in movies_as_dict]
@@ -181,17 +177,17 @@ def test_get_reviews_for_movie(in_movie_repo):
     reviews_as_dict = news_services.get_reviews_for_movie(1, in_movie_repo)
 
     # Check that 2 reviews were returned for movie with id 1.
-    assert len(reviews_as_dict) == 2
+    assert len(reviews_as_dict) == 3
 
-    # Check that the reviews relate to the movie whose id is 1.
-    movie_ids = [review['movie_id'] for review in reviews_as_dict]
-    movie_ids = set(movie_ids)
-    assert 1 in movie_ids and len(movie_ids) == 1
+    # # Check that the reviews relate to the movie whose id is 1.
+    # movie_ids = [review['movie_id'] for review in reviews_as_dict]
+    # movie_ids = set(movie_ids)
+    # assert 1 in movie_ids and len(movie_ids) == 1
 
 
 def test_get_reviews_for_non_existent_movie(in_movie_repo):
     with pytest.raises(NonExistentmovieException):
-        reviews_as_dict = news_services.get_reviews_for_movie(7, in_movie_repo)
+        reviews_as_dict = news_services.get_reviews_for_movie(1001, in_movie_repo)
 
 
 def test_get_reviews_for_movie_without_reviews(in_movie_repo):

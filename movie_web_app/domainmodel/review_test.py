@@ -1,4 +1,4 @@
-from movie_web_app.domainmodel.user import User, Review, Movie
+from movie_web_app.A1Files.user import User, Review, Movie
 from movie_web_app.domainmodel.watchlist import WatchList
 from movie_web_app.activitysimulations.watchingsimulation import MovieWatchingSimulation
 def main():

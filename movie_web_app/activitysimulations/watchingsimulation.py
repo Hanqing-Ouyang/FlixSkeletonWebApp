@@ -1,4 +1,4 @@
-from movie_web_app.domainmodel.user import User, Review, Movie
+from movie_web_app.A1Files.user import User, Review, Movie
 from movie_web_app.datafilereaders.movie_file_csv_reader import MovieFileCSVReader
 
 class MovieWatchingSimulation:

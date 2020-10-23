@@ -84,11 +84,16 @@ def test_repository_can_search_by_actor(in_movie_repo):
 
 
 def test_repository_can_search_by_director(in_movie_repo):
-    pass
+    directors= in_movie_repo.get_result("James Ward Byrkit")
+
+    assert directors == [Movie("Coherence",2013)]
 
 
 def test_repository_can_search_by_genre(in_movie_repo):
-    pass
+    movies = in_movie_repo.get_result("Action")
+
+    # Check that can search by title.
+    assert movies[0] == in_movie_repo.get_movie(1)
 
 
 def test_repository_does_not_retrieve_an_movie_when_there_are_no_movies_for_a_given_string(in_movie_repo):
@@ -96,15 +101,15 @@ def test_repository_does_not_retrieve_an_movie_when_there_are_no_movies_for_a_gi
     assert len(movies) == 0
 
 
-# def test_repository_can_get_first_movie(in_movie_repo):
-#     movie = in_movie_repo.get_first_movie()
-#     assert movie.title == 'Coronavirus: First case of virus in New Zealand'
+def test_repository_can_get_first_movie(in_movie_repo):
+    movie = in_movie_repo.get_first_movie()
+    assert movie.title == 'Guardians of the Galaxy'
 
-#
-# def test_repository_can_get_last_movie(in_movie_repo):
-#     movie = in_movie_repo.get_last_movie()
-#     assert movie.title == 'Coronavirus: Death confirmed as six more test positive in NSW'
-#
+
+def test_repository_can_get_last_movie(in_movie_repo):
+    movie = in_movie_repo.get_last_movie()
+    assert movie.title == 'Nine Lives'
+
 
 def test_repository_can_get_movies_by_ids(in_movie_repo):
     movies = in_movie_repo.get_movies_by_id([1, 2, 6])

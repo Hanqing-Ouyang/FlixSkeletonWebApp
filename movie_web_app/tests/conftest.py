@@ -14,7 +14,7 @@ TEST_DATA_PATH = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_a
 
 @pytest.fixture
 def in_movie_repo():
-    filename = 'movie_web_app/datafiles/Data1000Movies.csv'
+    filename = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/datafiles/Data1000Movies.csv'
     movie_file_reader = MovieFileCSVReader(filename)
 
     repo.repo_instance = mv_repo.MainRepository()
@@ -34,7 +34,7 @@ def client():
     my_app = create_app({
         'TESTING': True,  # Set to True during testing.
         'TEST_DATA_PATH': TEST_DATA_PATH,  # Path for loading test data into the repository.
-        'WTF_CSRF_ENABLED': False  # test_client will not send a CSRF token, so disable validation.
+        'WTF_CSRF_ENABLED': False,  # test_client will not send a CSRF token, so disable validation.
     })
 
     return my_app.test_client()
