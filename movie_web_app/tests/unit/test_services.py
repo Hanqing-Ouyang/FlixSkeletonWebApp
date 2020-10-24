@@ -194,3 +194,9 @@ def test_get_reviews_for_movie_without_reviews(in_movie_repo):
     reviews_as_dict = news_services.get_reviews_for_movie(2, in_movie_repo)
     assert len(reviews_as_dict) == 0
 
+def test_add_movie_to_watchlist(in_movie_repo):
+    username = 'thorke'
+    movie_id=2
+    user = in_movie_repo.get_user(username)
+    news_services.add_movie_to_watchlist(username,movie_id,in_movie_repo)
+    assert user.watched_movies== [in_movie_repo.get_movie(2)]

@@ -95,6 +95,25 @@ def get_reviews_for_movie(movie_id, repo: AbstractRepository):
 
     return reviews_to_dict(movie.reviews)
 
+def get_watchlist_for_user(username, repo: AbstractRepository):
+    user=repo.get_user(username)
+    if user is None:
+        raise UnknownUserException
+    movies_as_dict = movies_to_dict(user.watched_movies)
+    return movies_as_dict
+
+def get_movie_ids(movie_list):
+    ids=[]
+    for a in movie_list:
+        ids.append(int(a.id))
+    return ids
+
+def add_movie_to_watchlist(username,movie_id,repo: AbstractRepository):
+    user = repo.get_user(username)
+    movie = repo.get_movie(movie_id)
+    if user is None:
+        raise UnknownUserException
+    user.watch_movie(movie)
 
 # ============================================
 # Functions to convert model entities to dicts

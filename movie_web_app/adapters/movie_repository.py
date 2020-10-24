@@ -183,7 +183,6 @@ class MainRepository(AbstractRepository):
             return None
 
 
-
     def get_year_of_next_movie(self, movie: Movie):
         # index = None
         years = []
@@ -236,6 +235,16 @@ class MainRepository(AbstractRepository):
         if len(self._movies) > 0:
             movie = self._movies[-1]
         return movie
+
+    def add_favorite_movie(self, user: User, movie: Movie):
+        user.watch_movie(movie)
+
+    # def get_movie_id_for_watchlist(self,movie:Movie) ->list:
+    #     movies = []
+    #     for movie in self._movies:
+    #         if Genre(genre_name) in movie.genres:
+    #             movies.append(movie.id)
+    #     return movies
 
 def read_csv_file(filename: str):
     with open(filename, encoding='utf-8-sig') as infile:

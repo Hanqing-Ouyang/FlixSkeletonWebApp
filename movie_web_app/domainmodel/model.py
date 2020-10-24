@@ -86,9 +86,8 @@ class User:
         return hash(ty)
 
     def watch_movie(self, movie: 'Movie'):
-        if isinstance(movie, Movie):
-            self._watched_movies.append(movie)
-            self._time_spent_watching_movies_minutes = self._time_spent_watching_movies_minutes + movie.runtime_minutes
+        self._watched_movies.append(movie)
+        self._time_spent_watching_movies_minutes = self._time_spent_watching_movies_minutes + movie.runtime_minutes
 
     def add_review(self, review: 'Review'):
         if isinstance(review, Review):

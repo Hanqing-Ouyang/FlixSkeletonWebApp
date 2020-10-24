@@ -59,6 +59,7 @@ class MovieFileCSVReader:
                     if temp not in actors:
                         actors.append(temp)
                 index += 1
+            actors.sort(key=lambda x: x.actor_full_name, reverse=False)
             return list(actors)
 
     @property
@@ -66,10 +67,14 @@ class MovieFileCSVReader:
         with open(self.__file_name, mode='r', encoding='utf-8-sig') as csvfile:
             movie_file_reader = csv.DictReader(csvfile)
             index = 0
-            directors = set()
+            directors_set = set()
+            directors=list()
             for row in movie_file_reader:
-                directors.add(Director(row['Director']))
+                directors_set.add(Director(row['Director']))
                 index += 1
+            for a in directors_set:
+                directors.append(a)
+            directors.sort(key=lambda x: x.director_full_name, reverse=False)
             return list(directors)
 
     @property

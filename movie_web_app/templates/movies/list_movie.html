@@ -54,6 +54,7 @@
             {% if movie.reviews|length > 0 and movie.id != show_reviews_for_movie %}
                 <button class="btn-general" onclick="location.href='{{ movie.view_review_url }}'">{{ movie.reviews|length }} reviews</button>
             {% endif %}
+            <button class="btn-general" onclick="location.href='{{ movie.add_to_watchlist_url }}'">Like</button>
             <button class="btn-general" onclick="location.href='{{ movie.add_review_url }}'">Review</button>
         </div>
         {% if movie.id == show_reviews_for_movie %}

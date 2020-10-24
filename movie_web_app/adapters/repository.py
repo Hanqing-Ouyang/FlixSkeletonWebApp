@@ -199,6 +199,9 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def add_favorite_movie(self, user: User, movie: Movie):
+        raise NotImplementedError
 
 
 
