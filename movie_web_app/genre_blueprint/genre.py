@@ -25,4 +25,5 @@ def list_genre():
         register_url=url_for('authentication_bp.register'),
         genres=repo.repo_instance.get_genres(),
         selected_movies=utilities.get_selected_movies(),
+        genre_urls=utilities.get_genres_and_urls(),
     )

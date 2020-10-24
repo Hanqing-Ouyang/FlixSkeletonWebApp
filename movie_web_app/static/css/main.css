@@ -242,12 +242,10 @@ input[type='submit']:hover {
   padding: 0;
   overflow: hidden;
   background-color: #333333;
-
 }
 
 #pages ul li {
   float: left;
-  display:inline;
 }
 
 #pages ul li a{

@@ -3,8 +3,6 @@ from typing import List, Iterable
 import pytest
 
 class Genre:
-    pass
-
     def __init__(
             self, gname: str,
     ):

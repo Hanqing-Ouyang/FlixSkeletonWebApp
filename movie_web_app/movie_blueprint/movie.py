@@ -106,7 +106,7 @@ def movies_by_year():
             movies_title=target_year,
             movies=movies,
             selected_movies=utilities.get_selected_movies(6),
-            genre_urls=url_for('genre_bp.list_genre'),
+            genre_urls=utilities.get_genres_and_urls(),
             first_movie_url=first_movie_url,
             last_movie_url=last_movie_url,
             prev_movie_url=prev_movie_url,
@@ -120,7 +120,7 @@ def movies_by_year():
 
 @movie_blueprint.route('/movies_by_genre', methods=['GET'])
 def movies_by_genre():
-    movies_per_page = 3
+    movies_per_page = 10
 
     # Read query parameters.
     genre_name = request.args.get('genre')
@@ -177,8 +177,8 @@ def movies_by_genre():
         title='movies',
         movies_title='movies genreged by ' + genre_name,
         movies=movies,
-        selected_movies=utilities.get_selected_movies(len(movies) * 2),
-        genre_urls=url_for('genre_bp.list_genre'),
+        selected_movies=utilities.get_selected_movies(len(movies)),
+        genre_urls=utilities.get_genres_and_urls(),
         first_movie_url=first_movie_url,
         last_movie_url=last_movie_url,
         prev_movie_url=prev_movie_url,
