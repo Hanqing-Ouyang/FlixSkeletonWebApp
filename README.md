@@ -71,7 +71,7 @@ You can then run tests from within PyCharm.
 
  
 
-**Basic Usage** 
+##**Basic Usage** 
 1.Register/Login/Logout function
 (Note:Login first before viewing movies)
 
