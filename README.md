@@ -6,12 +6,19 @@ The skeleton python project for the 2020 S2 CompSci 235 practical assignment CS2
 1._Set up a virtual environment :_ 
 
 First Way:
-
+(For Windows)
 ```shell
-$ cd COMPSCI-235
+$ cd FlixSkeletonWebApp
 $ py -3 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
+```
+(For Mac)
+```shell
+$ cd FlixSkeletonWebApp
+$ python3 -m venv venv
+$ venv\Scripts\activate
+$ python3 -m pip install -r requirements.txt
 ```
 
 Second Way:
@@ -25,7 +32,7 @@ Then click 'OK'
 
 First Way:
 
-When using PyCharm, set the virtual environment using 'File'->'Settings' and select 'Project:COMPSCI-235' from the left menu. Select 'Project Interpreter', click on the gearwheel button and select 'Add'. Click the 'Existing environment' radio button to select the virtual environment.
+When using PyCharm, set the virtual environment using 'File'->'Settings' and select 'Project:FlixSkeletonWebApp' from the left menu. Select 'Project Interpreter', click on the gearwheel button and select 'Add'. Click the 'Existing environment' radio button to select the virtual environment.
 
 Second Way:
 
@@ -37,16 +44,20 @@ Note: sometimes several packages need you to install manually after above steps.
 
 **Running the application**
 
-From the *COMPSCI-235* directory, and within the activated virtual environment (see *venv\Scripts\activate* above):
+From the *FlixSkeletonWebApp* directory, and within the activated virtual environment (see *venv\Scripts\activate* above):
 
+(For Windows)
 ````shell
 $ flask run
 ```` 
-
+(For Mac)
+````shell
+$ python3 -m flask run
+```` 
 
 ## Configuration
 
-The *COMPSCI-235/.env* file contains variable settings. They are set with appropriate values.
+The *FlixSkeletonWebApp/.env* file contains variable settings. They are set with appropriate values.
 
 * `FLASK_APP`: Entry point of the application (should always be `wsgi.py`).
 * `FLASK_ENV`: The environment in which to run the application (either `development` or `production`).
@@ -57,15 +68,15 @@ The *COMPSCI-235/.env* file contains variable settings. They are set with approp
 
 ## Testing
 
-Testing requires that file *COMPSCI-235/tests/conftest.py* be edited to set the value of `TEST_DATA_PATH`. You should set this to the absolute path of the *COMPSCI-235/tests/data* directory. 
+Testing requires that file *FlixSkeletonWebApp/tests/conftest.py* be edited to set the value of `TEST_DATA_PATH`. You should set this to the absolute path of the *FlixSkeletonWebApp/tests/data* directory. 
 
 E.g. 
 
-`TEST_DATA_PATH = os.path.join('C:', os.sep, 'Users', 'ian', 'Documents', 'Python dev', 'COVID-19', 'tests', 'data')`
+`TEST_DATA_PATH = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/tests/data'`
 
 assigns TEST_DATA_PATH with the following value (the use of os.path.join and os.sep ensures use of the correct platform path separator):
 
-`C:\Users\ian\Documents\python-dev\COVID-19\tests\data`
+`/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/tests/data`
 
 You can then run tests from within PyCharm.
 
