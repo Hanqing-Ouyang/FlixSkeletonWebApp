@@ -12,6 +12,7 @@ class Actor:
 
         self._colleagues = []
 
+
     @property
     def actor_full_name(self):
         return self._actor_full_name

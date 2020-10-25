@@ -27,6 +27,8 @@ class MainRepository(AbstractRepository):
         self._users: List[User] = list()
         self._reviews: List[Review] = list()
         self._years: List[int] = list()
+        self._watchlist: List[Movie] = list()
+        self._watchlist_dict= dict()
 
 
     def __iter__(self):
@@ -124,12 +126,13 @@ class MainRepository(AbstractRepository):
 
     def add_user(self, user: User):
         self._users.append(user)
-        print(user)
-        print(self._users)
+        self._watchlist_dict[user]=[]
+        # print(user)
+        # print(self._users)
 
     def get_user(self, username) -> User:
-        print(username)
-        print("get_user",next((user for user in self._users if user.user_name == username.lower()), None))
+        # print(username)
+        # print("get_user",next((user for user in self._users if user.user_name == username.lower()), None))
         return next((user for user in self._users if user.user_name == username.lower()), None)
 
     def add_users(self, users:list):
@@ -238,6 +241,12 @@ class MainRepository(AbstractRepository):
 
     def add_favorite_movie(self, user: User, movie: Movie):
         user.watch_movie(movie)
+        if user in self._watchlist_dict.keys():
+            if movie not in self._watchlist_dict.values():
+                self._watchlist_dict[user].append(movie)
+
+    def get_watchlist(self,user):
+        return self._watchlist_dict[user]
 
     # def get_movie_id_for_watchlist(self,movie:Movie) ->list:
     #     movies = []

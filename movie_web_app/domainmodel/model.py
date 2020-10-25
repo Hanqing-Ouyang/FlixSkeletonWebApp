@@ -87,7 +87,7 @@ class User:
 
     def watch_movie(self, movie: 'Movie'):
         self._watched_movies.append(movie)
-        self._time_spent_watching_movies_minutes = self._time_spent_watching_movies_minutes + movie.runtime_minutes
+        # self._time_spent_watching_movies_minutes = self._time_spent_watching_movies_minutes + movie.runtime_minutes
 
     def add_review(self, review: 'Review'):
         if isinstance(review, Review):
@@ -360,3 +360,4 @@ def make_review(review_text: str, user: User, movie: Movie, timestamp: datetime 
     movie.add_review(review)
 
     return review
+

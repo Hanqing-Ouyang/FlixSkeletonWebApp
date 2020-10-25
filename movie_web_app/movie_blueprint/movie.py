@@ -100,7 +100,7 @@ def movies_by_year():
         for movie in movies:
             movie['view_review_url'] = url_for('movie_bp.movies_by_year', year=target_year, view_reviews_for=movie['id'])
             movie['add_review_url'] = url_for('movie_bp.review_on_movie', movie=movie['id'])
-            movie['add_to_watchlist_url'] = url_for('movie_bp.movies_in_watchlist', user=username,movie=movie['id'])
+            movie['add_to_watchlist_url'] = url_for('movie_bp.add_to_watchlist', user=username, movie=movie['id'])
 
         # Generate the webpage to display the movies.
         return render_template(
@@ -192,14 +192,23 @@ def movies_by_genre():
         show_reviews_for_movie=movie_to_show_reviews,
     )
 
-@movie_blueprint.route('/add', methods=['GET', 'POST'])
+
+@movie_blueprint.route('/add', methods=['GET'])
 @login_required
 def add_to_watchlist():
     movie_id = int(request.args.get('movie'))
     username = session['username']
-    services.add_movie_to_watchlist(username,movie_id,repo.repo_instance)
+    movie= services.get_movie(movie_id,repo.repo_instance)
+    user = repo.repo_instance.get_user(username)
+    services.add_movie_to_watchlist(username, movie_id, repo.repo_instance)
+    user.watch_movie(movie)
     print("add to watchlist now")
-    return ("nothing")
+    print("this is movie id", movie_id)
+    print("user", user.watched_movies)
+    print(services.get_watchlist_for_user(username,repo.repo_instance))
+    # print(services.get_watchlist(repo.repo_instance))
+    print("user", user)
+    return redirect(url_for('movie_bp.movies_by_year', year=movie['year']))
 
 @movie_blueprint.route('/watchlist', methods=['GET', 'POST'])
 @login_required
@@ -208,15 +217,15 @@ def movies_in_watchlist():
 
     # Read query parameters.
     # genre_name = request.args.get('genre')
-    movie_id = int(request.args.get('movie'))
+    # movie_id = int(request.args.get('movie'))
     username = session['username']
     cursor = request.args.get('cursor')
     movie_to_show_reviews = request.args.get('view_reviews_for')
-    services.add_movie_to_watchlist(username, movie_id, repo.repo_instance)
+    # services.add_movie_to_watchlist(username, movie_id, repo.repo_instance)
     user = repo.repo_instance.get_user(username)
-    print("this is movie id", movie_id)
-    print(user.watched_movies)
-    print("user",user)
+    # print("this is movie id", movie_id)
+    # print(user.watched_movies)
+    # print("user",user)
 
     if movie_to_show_reviews is None:
         # No view-reviews query parameter, so set to a non-existent movie id.
@@ -233,11 +242,13 @@ def movies_in_watchlist():
         cursor = int(cursor)
 
     # Retrieve movie ids for movies that are genreged with genre_name.
-    # movie_ids = services.get_movie_ids_for_genre(genre_name, repo.repo_instance)
-    movies = services.get_watchlist_for_user(username,repo.repo_instance)
-    movie_ids = services.get_movie_ids(movies)
+
+    movies_list = services.get_watchlist_for_user(username,repo.repo_instance)
+    movie_ids = services.get_movie_ids(movies_list)
+    # Movie Dict
+    # movies = services.get_movies_by_id(movie_ids,repo.repo_instance)
     # Retrieve the batch of movies to display on the Web page.
-    # movies = services.get_movies_by_id(movie_ids[cursor:cursor + movies_per_page], repo.repo_instance)
+    movies = services.get_movies_by_id(movie_ids[cursor:cursor + movies_per_page], repo.repo_instance)
 
     first_movie_url = None
     last_movie_url = None
@@ -259,17 +270,18 @@ def movies_in_watchlist():
         last_movie_url = url_for('movie_bp.movies_in_watchlist', user=username, cursor=last_cursor)
 
     # Construct urls for viewing movie reviews and adding reviews.
-    # for movie in movies:
-
-
+    for movie in movies:
+        movie['view_review_url'] = url_for('movie_bp.movies_in_watchlist', user=username, cursor=cursor,
+                                           view_reviews_for=movie['id'])
+        movie['add_review_url'] = url_for('movie_bp.review_on_movie', movie=movie['id'])
 
     # Generate the webpage to display the movies.
     return render_template(
         'movies/list_movie.html',
         title='My favorite movie',
         movies_title='My favorite movie',
-        movies=movies,
-        selected_movies=utilities.get_selected_movies(len(movies)),
+        movies=movies_list,
+        selected_movies=utilities.get_selected_movies(6),
         genre_urls=utilities.get_genres_and_urls(),
         first_movie_url=first_movie_url,
         last_movie_url=last_movie_url,

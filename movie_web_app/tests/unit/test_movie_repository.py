@@ -242,4 +242,10 @@ def test_repository_does_not_add_a_review_without_an_movie_properly_attached(in_
 def test_repository_can_retrieve_reviews(in_movie_repo):
     assert len(in_movie_repo.get_reviews()) == 3
 
+def test_add_favorite_movie(in_movie_repo):
+    user = in_movie_repo.get_user('thorke')
+    movie = in_movie_repo.get_movie(2)
+    in_movie_repo.add_favorite_movie(user,movie)
+    assert user.watched_movies == [in_movie_repo.get_movie(2)]
+
 

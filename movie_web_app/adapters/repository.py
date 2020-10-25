@@ -122,9 +122,9 @@ class AbstractRepository(abc.ABC):
         If the Comment doesn't have bidirectional links with an Article and a User, this method raises a
         RepositoryException and doesn't update the repository.
         """
-        print(review)
-        print(review.user)
-        print(review.user.reviews)
+        # print(review)
+        # print(review.user)
+        # print(review.user.reviews)
         if review.user is None or review not in review.user.reviews:
             raise RepositoryException('Comment not correctly attached to a User')
         if review.movie is None or review not in review.movie.reviews:
@@ -201,6 +201,10 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def add_favorite_movie(self, user: User, movie: Movie):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_watchlist(self,user):
         raise NotImplementedError
 
 

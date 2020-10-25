@@ -72,3 +72,7 @@ def test_make_review_establishes_relationships(movie, user):
 
     # Check that the review knows about the movie.
     assert review.movie is movie
+
+def test_watchlist(user,movie):
+    user.watch_movie(movie)
+    assert user.watched_movies == [Movie("Molly",2018)]
