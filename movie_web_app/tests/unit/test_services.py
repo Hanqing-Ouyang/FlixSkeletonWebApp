@@ -200,3 +200,13 @@ def test_add_movie_to_watchlist(in_movie_repo):
     user = in_movie_repo.get_user(username)
     news_services.add_movie_to_watchlist(username,movie_id,in_movie_repo)
     assert user.watched_movies== [in_movie_repo.get_movie(2)]
+
+def test_get_watchlist(in_movie_repo):
+    username = 'thorke'
+    movie_id = 2
+    user = in_movie_repo.get_user(username)
+    news_services.add_movie_to_watchlist(username, movie_id, in_movie_repo)
+
+    movies= news_services.get_watchlist_for_user('thorke',in_movie_repo)
+    assert movies == [in_movie_repo.get_movie(2)]
+

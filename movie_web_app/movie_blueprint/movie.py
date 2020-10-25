@@ -280,7 +280,7 @@ def movies_in_watchlist():
         'movies/list_movie.html',
         title='My favorite movie',
         movies_title='My favorite movie',
-        movies=movies_list,
+        movies=movies,
         selected_movies=utilities.get_selected_movies(6),
         genre_urls=utilities.get_genres_and_urls(),
         first_movie_url=first_movie_url,

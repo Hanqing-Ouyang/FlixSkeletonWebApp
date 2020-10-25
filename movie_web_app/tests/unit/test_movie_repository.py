@@ -248,4 +248,13 @@ def test_add_favorite_movie(in_movie_repo):
     in_movie_repo.add_favorite_movie(user,movie)
     assert user.watched_movies == [in_movie_repo.get_movie(2)]
 
+def test_get_watchlist(in_movie_repo):
+    user = in_movie_repo.get_user('thorke')
+    movie = in_movie_repo.get_movie(2)
+    in_movie_repo.add_favorite_movie(user, movie)
+
+    movies= in_movie_repo.get_watchlist(user)
+    assert movies == [in_movie_repo.get_movie(2)]
+
+
 
