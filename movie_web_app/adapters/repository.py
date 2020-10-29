@@ -17,17 +17,17 @@ class RepositoryException(Exception):
 
 class AbstractRepository(abc.ABC):
 
-    @abc.abstractmethod
-    def __iter__(self):
-        raise NotImplementedError
+    # @abc.abstractmethod
+    # def __iter__(self):
+    #     raise NotImplementedError
 
     @abc.abstractmethod
     def get_users(self):
         raise NotImplementedError
 
-    @abc.abstractmethod
-    def __next__(self):
-        raise NotImplementedError
+    # @abc.abstractmethod
+    # def __next__(self):
+    #     raise NotImplementedError
 
     @abc.abstractmethod
     def add_movie(self, title: str):

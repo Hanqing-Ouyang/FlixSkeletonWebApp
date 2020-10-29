@@ -11,7 +11,10 @@ from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import scoped_session
 from flask import _app_ctx_stack
 
-from movie_web_app.domainmodel.model import User, Movie, Review, Genre
+from movie_web_app.domainmodel.director import Director
+from movie_web_app.domainmodel.actor import Actor
+from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import User,Review,Movie,make_review
 from movie_web_app.adapters.repository import AbstractRepository
 
 genres = None
@@ -90,29 +93,29 @@ class SqlAlchemyRepository(AbstractRepository):
 
         return movie
 
-    def get_movies_by_year(self, target_year: year) -> List[Movie]:
+    def get_movies_by_year(self, target_year: int) -> List[Movie]:
         if target_year is None:
             movies = self._session_cm.session.query(Movie).all()
             return movies
         else:
             # Return movies matching target_year; return an empty list if there are no matches.
-            movies = self._session_cm.session.query(Movie).filter(Movie._yaer == target_year).all()
+            movies = self._session_cm.session.query(Movie).filter(Movie.year == target_year).all()
             return movies
 
     def get_number_of_movies(self):
-        number_of_movies = self._session_cm.session.query(movie).count()
+        number_of_movies = self._session_cm.session.query(Movie).count()
         return number_of_movies
 
     def get_first_movie(self):
-        movie = self._session_cm.session.query(movie).first()
+        movie = self._session_cm.session.query(Movie).first()
         return movie
 
     def get_last_movie(self):
-        movie = self._session_cm.session.query(movie).order_by(desc(movie._id)).first()
+        movie = self._session_cm.session.query(Movie).order_by(desc(Movie.id)).first()
         return movie
 
     def get_movies_by_id(self, id_list):
-        movies = self._session_cm.session.query(movie).filter(movie._id.in_(id_list)).all()
+        movies = self._session_cm.session.query(Movie).filter(Movie.id.in_(id_list)).all()
         return movies
 
     def get_movie_ids_for_genre(self, genre_name: str):
@@ -172,6 +175,109 @@ class SqlAlchemyRepository(AbstractRepository):
         with self._session_cm as scm:
             scm.session.add(review)
             scm.commit()
+
+
+    # the Functions doesn't have #
+
+    def add_actors(self, actors: list):
+        for actor in actors:
+            with self._session_cm as scm:
+                scm.session.add(actor)
+                scm.commit()
+
+    def add_genres(self, genres: list):
+        for genre in genres:
+            with self._session_cm as scm:
+                scm.session.add(genre)
+                scm.commit()
+
+    def add_directors(self, directors: list):
+        for director in directors:
+            with self._session_cm as scm:
+                scm.session.add(director)
+                scm.commit()
+
+    def get_movies(self):
+        movies = self._session_cm.session.query(Movie).all()
+        return movies
+
+    def get_actors(self):
+        actors = self._session_cm.session.query(Actor).all()
+        return actors
+
+    def get_directors(self):
+        directors = self._session_cm.session.query(Director).all()
+        return directors
+
+    def get_result(self, title: str) -> list:
+        title=title.title().strip()
+        movies= self._session_cm.session.execute(
+                    """SELECT movie 
+                    FROM movies, 
+                    WHERE movie.title = :title 
+                    OR movie.actors.actor_full_name LIKE :title 
+                    OR movie.director.director_full_name LIKE :title 
+                    OR movie.genres.genre_name LIKE :title 
+                    ORDER BY movie_id ASC""",
+                    {'title': title }
+            ).fetchall()
+        return movies
+        # for movie in self._movies:
+        #     if movie.title == title or \
+        #             Actor(title) in movie.actors or \
+        #             movie.director == Director(title) or \
+        #             Genre(title) in movie.genres:
+        #         movies.append(movie)
+        # return movies
+
+    def add_director(self, director: Director):
+        with self._session_cm as scm:
+            scm.session.add(director)
+            scm.commit()
+        # self._directors.append(director)
+
+    def get_director(self, director_full_name: str):
+        director = self._session_cm.session.query(Director).filter(Director.director_full_name == director_full_name).order_by(asc(Director.director_full_name)).first()
+        return director
+        # return next((director for director in self._directors if director.director_full_name == director_full_name), None)
+
+    def add_actor(self, actor: Actor):
+        with self._session_cm as scm:
+            scm.session.add(actor)
+            scm.commit()
+        # self._actors.append(actor)
+
+    def get_actor(self, actor_full_name: str):
+        actor = self._session_cm.session.query(Actor).filter(
+            Actor.actor_full_name == actor_full_name).order_by(asc(Actor.actor_full_name)).first()
+        return actor
+        # return next((actor for actor in self._actors if actor.actor_full_name == actor_full_name), None)
+
+    def add_favorite_movie(self, user: User, movie: Movie):
+        user.watch_movie(movie)
+        if user in self._watchlist_dict.keys():
+            if movie not in self._watchlist_dict.values():
+                self._watchlist_dict[user].append(movie)
+
+    def get_watchlist(self,user):
+        return self._watchlist_dict[user]
+
+    def add_movies(self, movies:list):
+        for movie in movies:
+            self._movies.append(movie)
+            self._movies_index[movie.id] = movie
+            if movie.year not in self._years:
+                self._years.append(movie.year)
+
+    def get_genre(self, genre_name) -> Genre:
+        genre = self._session_cm.session.query(Genre).filter(Genre.genre_name == genre_name).one()
+        return genre
+        # return next((genre for genre in self._genres if genre.genre_name == genre_name), None)
+
+    def get_users(self):
+        users = self._session_cm.session.query(User).all()
+        return users
+        # return self._users
 
 def movie_record_generator(filename: str):
     with open(filename, mode='r', encoding='utf-8-sig') as infile:
@@ -255,8 +361,8 @@ def populate(engine: Engine, data_path: str):
 
     insert_movies = """
         INSERT INTO movies (
-        id, year, title, first_para, hyperlink, image_hyperlink)
-        VALUES (?, ?, ?, ?, ?, ?)"""
+        id, year, title)
+        VALUES (?, ?, ?)"""
     cursor.executemany(insert_movies, movie_record_generator(os.path.join(data_path, 'news_movies.csv')))
 
     insert_genres = """

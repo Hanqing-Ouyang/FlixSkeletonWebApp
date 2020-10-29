@@ -34,7 +34,6 @@ def movie_to_dict(movie: Movie):
     movie_dict = {
         'year': movie.year,
         'title': movie.title,
-
     }
     return movie_dict
 

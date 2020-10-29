@@ -31,19 +31,19 @@ class MainRepository(AbstractRepository):
         self._watchlist_dict= dict()
 
 
-    def __iter__(self):
-        self._current = 0
-        return self
+    # def __iter__(self):
+    #     self._current = 0
+    #     return self
 
     def get_users(self):
         return self._users
 
-    def __next__(self):
-        if self._current >= len(self._movies):
-            raise StopIteration
-        else:
-            self._current += 1
-            return self._movies[self._current-1]
+    # def __next__(self):
+    #     if self._current >= len(self._movies):
+    #         raise StopIteration
+    #     else:
+    #         self._current += 1
+    #         return self._movies[self._current-1]
 
     def add_movies(self, movies:list):
         for movie in movies:
