@@ -4,29 +4,29 @@ import pytest
 
 class Genre:
     def __init__(
-            self, gname: str,
+            self, genre_name: str,
     ):
-        self._gname: str = gname
+        self._genre_name: str = genre_name
 
     @property
     def genre_name(self) -> str:
-        return self._gname
+        return self._genre_name
 
     def __repr__(self):
-        if not self._gname:
+        if not self._genre_name:
             return f'<Genre None>'
         else:
-            return f'<Genre {self._gname}>'
+            return f'<Genre {self._genre_name}>'
 
     def __eq__(self, other):
         if not isinstance(other, Genre):
             return False
         return (
-                other._gname == self._gname
+                other._genre_name == self._genre_name
         )
 
     def __lt__(self, other):
-        return self._gname < other._gname
+        return self._genre_name < other._genre_name
 
     def __hash__(self):
-        return hash(self._gname)
+        return hash(self._genre_name)

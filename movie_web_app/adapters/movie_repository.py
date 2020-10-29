@@ -268,6 +268,32 @@ def read_csv_file(filename: str):
             row = [item.strip() for item in row]
             yield row
 
+def load_movies(data_path: str, repo: MainRepository):
+    movies = dict()
+
+    for data_row in read_csv_file(data_path + '/Data1000Movies.csv'):
+        movie = Movie(
+            title=data_row[1],
+            year=int(data_row[6]),
+        )
+        movie.director = Director(data_row[4])
+        gn = []
+        for a in data_row[2].split(","):
+            temp = Genre(a.strip())
+            gn.append(temp)
+        movie.genres = gn
+        ac = []
+        for a in data_row[5].split(","):
+            temp = Actor(a.strip())
+            ac.append(temp)
+        movie.actors = ac
+        movie.id = int(data_row[0])
+        movie.runtime_minutes = int(data_row[7])
+        movie.description = data_row[3]
+        repo.add_movie(movie)
+        movies[data_row[0]] = movie
+    return movies
+
 def load_users(data_path: str, repo: MainRepository):
     users = dict()
 
@@ -296,7 +322,7 @@ def load_reviews(data_path: str, repo: MainRepository, users):
 def populate(data_path: str, repo: MainRepository):
     # # Load articles and tags into the repository.
     # load_articles_and_tags(data_path, repo)
-
+    load_movies(data_path, repo)
     # Load users into the repository.
     users = load_users(data_path, repo)
 

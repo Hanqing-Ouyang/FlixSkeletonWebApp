@@ -26,9 +26,16 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
         data_path = app.config['TEST_DATA_PATH']
 
-    if app.config['REPOSITORY'] == 'memory':
+    if app.config['REPOSITORY'] == 'movie':
         # Create the MemoryRepository instance for a memory-based repository.
+        filename = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/datafiles/Data1000Movies.csv'
+        movie_file_reader = MovieFileCSVReader(filename)
         repo.repo_instance = movie_repository.MainRepository()
+        # repo.repo_instance.add_movies(movie_file_reader.dataset_of_movies)
+        # repo.repo_instance.add_actors(movie_file_reader.dataset_of_actors)
+        # repo.repo_instance.add_directors(movie_file_reader.dataset_of_directors)
+        # repo.repo_instance.add_genres(movie_file_reader.dataset_of_genres)
+
         movie_repository.populate(data_path, repo.repo_instance)
 
     elif app.config['REPOSITORY'] == 'database':
@@ -54,7 +61,14 @@ def create_app(test_config=None):
             # Generate mappings that map domain model classes to the database tables.
             map_model_to_tables()
 
+            repo.repo_instance = movie_repository.MainRepository()
+            movie_repository.populate(data_path, repo.repo_instance)
+
             database_repository.populate(database_engine, data_path)
+            data_filename='Data1000Movies.csv'
+            # data_filename = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/datafiles/Data1000Movies.csv'
+            session_factory= sessionmaker(autocommit=False, autoflush= True,bind=database_engine)
+            database_repository.populate_reader(session_factory, data_path, data_filename)
 
         else:
             # Solely generate mappings that map domain model classes to the database tables.
@@ -64,6 +78,7 @@ def create_app(test_config=None):
         session_factory = sessionmaker(autocommit=False, autoflush=True, bind=database_engine)
         # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
         repo.repo_instance = database_repository.SqlAlchemyRepository(session_factory)
+
 
     with app.app_context():
         from .movie_blueprint import movie
@@ -87,14 +102,7 @@ def create_app(test_config=None):
         from .authentication import authentication
         app.register_blueprint(authentication.authentication_blueprint)
 
-    # filename = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/datafiles/Data1000Movies.csv'
-    # movie_file_reader = MovieFileCSVReader(filename)
-    # repo.repo_instance = movie_repository.MainRepository()
-    # repo.repo_instance.add_movies(movie_file_reader.dataset_of_movies)
-    # repo.repo_instance.add_actors(movie_file_reader.dataset_of_actors)
-    # repo.repo_instance.add_directors(movie_file_reader.dataset_of_directors)
-    # repo.repo_instance.add_genres(movie_file_reader.dataset_of_genres)
-    # movie_repository.populate(data_path, repo.repo_instance)
+
 
     # Register a callback the makes sure that database sessions are associated with http requests
     # We reset the session inside the database repository before a new flask request is generated

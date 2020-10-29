@@ -23,26 +23,30 @@ reviews = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('user_id', ForeignKey('users.id')),
     Column('movie_id', ForeignKey('movies.id')),
-    Column('review', String(1024), nullable=False),
+    Column('review_text', String(1024), nullable=False),
     Column('timestamp', DateTime, nullable=False)
 )
 
 movies = Table(
     'movies', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('year', Integer, nullable=False),
     Column('title', String(255), nullable=False),
-    Column('description', String(255), nullable=True),
+    Column('genres', String(255), nullable=False),
+    Column('description', String(255), nullable=False),
     Column('director', String(255), nullable=True),
     Column('actors', String(1024), nullable=True),
-    Column('genres', String(255), nullable=True),
-    Column('reviews', String(255), nullable=True)
+    Column('year', Integer, nullable=False),
+    # Column('Runtime (Minutes)', Integer, nullable=True),
+    # Column('Rating', Integer, nullable=True),
+    # Column('Votes', Integer, nullable=True),
+    # Column('Revenue (Millions)', Integer, nullable=True),
+    # Column('Metascore', Integer, nullable=True),
 )
 
 genres = Table(
     'genres', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('name', String(64), nullable=False)
+    Column('genre_name', String(64), nullable=False)
 )
 
 movie_genres = Table(
@@ -52,42 +56,74 @@ movie_genres = Table(
     Column('genre_id', ForeignKey('genres.id'))
 )
 
-directors = Table(
-    'directors', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('director_full_name', String(64), nullable=False)
-)
-
-actors = Table(
-    'actors', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('actor_full_name', String(64), nullable=False)
-)
-
-
+# directors = Table(
+#     'directors', metadata,
+#     Column('id', Integer, primary_key=True, autoincrement=True),
+#     Column('director_full_name', String(64), nullable=False)
+# )
+#
+# movie_director = Table(
+#     'movie_director', metadata,
+#     Column('id', Integer, primary_key=True, autoincrement=True),
+#     Column('movie_id', ForeignKey('movies.id')),
+#     Column('director_id', ForeignKey('directors.id'))
+# )
+#
+# actors = Table(
+#     'actors', metadata,
+#     Column('id', Integer, primary_key=True, autoincrement=True),
+#     Column('actor_full_name', String(64), nullable=False)
+# )
+#
+# movie_actors = Table(
+#     'movie_actors', metadata,
+#     Column('id', Integer, primary_key=True, autoincrement=True),
+#     Column('movie_id', ForeignKey('movies.id')),
+#     Column('actor_id', ForeignKey('actors.id'))
+# )
 
 
 def map_model_to_tables():
     mapper(model.User, users, properties={
-        '_username': users.c.username,
-        '_password': users.c.password,
+        '_username': users.columns.username,
+        '_password': users.columns.password,
         '_reviews': relationship(model.Review, backref='_user')
     })
     mapper(model.Review, reviews, properties={
-        '_review': reviews.c.review,
-        '_timestamp': reviews.c.timestamp
+        '_review_text': reviews.columns.review_text,
+        '_timestamp': reviews.columns.timestamp
     })
-    movies_mapper = mapper(model.Movie, movies, properties={
-        '_id': movies.c.id,
-        '_year': movies.c.year,
-        '_title': movies.c.title,
+    mapper(model.Movie, movies, properties={
+        '_year': movies.columns.year,
+        '_title': movies.columns.title,
+        '_id': movies.columns.id,
+        '_description':movies.columns.description,
         '_reviews': relationship(model.Review, backref='_movie'),
+        '_actors' : movies.columns.actors,
+        '_director': movies.columns.director,
     })
+
     mapper(genre.Genre, genres, properties={
-        '_genre_name': genres.c.name,
-        '_genreged_movies': relationship(
-            movies_mapper,
-            secondary=movie_genres,
-            backref="_genres"
-        )
+        '_genre_name': genres.columns.genre_name,
+        # '_genreged_movies': relationship(
+        #     movies_mapper,
+        #     secondary=movie_genres,
+        #     backref="_genres"
+        # )
     })
+    # mapper(actor.Actor, actors, properties={
+    #     '_actor_full_name': actors.c.actor_full_name,
+    #     '_movie_actors': relationship(
+    #         movies_mapper,
+    #         secondary=movie_actors,
+    #         backref="_actors"
+    #     )
+    # })
+    # mapper(director.Director, directors, properties={
+    #     '_director_full_name': directors.c.director_full_name,
+    #     '_movie_director': relationship(
+    #         movies_mapper,
+    #         secondary=movie_director,
+    #         backref="_director"
+    #     )
+    # })
