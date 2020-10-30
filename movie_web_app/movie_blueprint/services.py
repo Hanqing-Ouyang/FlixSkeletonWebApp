@@ -1,8 +1,8 @@
 from typing import List, Iterable
 
 from movie_web_app.adapters.repository import AbstractRepository
-from movie_web_app.domainmodel.model import User,Review,Movie ,make_review
-from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import User,Review,Movie ,make_review,Genre
+# from movie_web_app.domainmodel.genre import
 import movie_web_app.adapters.repository as repo
 
 
@@ -144,8 +144,8 @@ def movies_to_dict(movies: Iterable[Movie]):
 
 def review_to_dict(review: Review):
     review_dict = {
-        'username': review.user.user_name,
-        'movie_id': review.rating,
+        'username': review.user.username,
+        'movie_id': review.movie.id,
         'review_text': review.review_text,
         'timestamp': review.timestamp
     }
@@ -169,7 +169,7 @@ def genres_to_dict(genres: Iterable[Genre]):
 
 def user_to_dict(user: User):
     user_dict = {
-        'name': user.user_name,
+        'name': user.username,
         '_watched_movies': user.watched_movies,
         'reviews': user.reviews
     }

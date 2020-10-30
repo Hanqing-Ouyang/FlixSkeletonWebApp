@@ -2,8 +2,8 @@ from datetime import date
 
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.model import User,Review,Movie,make_review
+# from movie_web_app.domainmodel.genre import
+from movie_web_app.domainmodel.model import User,Review,Movie,make_review,Genre
 import pytest
 
 

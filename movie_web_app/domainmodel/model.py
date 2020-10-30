@@ -1,7 +1,7 @@
 # from movie_web_app.domainmodel.movie import Movie
 # from movie_web_app.domainmodel.review import Review
 from datetime import datetime
-from movie_web_app.domainmodel.genre import Genre
+# from movie_web_app.domainmodel.genre import Genre
 from movie_web_app.domainmodel.actor import Actor
 from movie_web_app.domainmodel.director import Director
 from typing import List, Iterable
@@ -10,27 +10,27 @@ from typing import List, Iterable
 class User:
 
     def __init__(
-            self, user_name: str, password: str
+            self, username: str, password: str
     ):
-        if user_name == "" or type(user_name) is not str:
-            self._user_name = None
+        if username == "" or type(username) is not str:
+            self._username = None
         else:
-            self._user_name = user_name.strip().lower()
+            self._username = username.strip().title()
         self._password: str = password
         self._watched_movies = []
         self._reviews = []
         self._time_spent_watching_movies_minutes = 0
 
     @property
-    def user_name(self) -> str:
-        return self._user_name
+    def username(self) -> str:
+        return self._username
 
-    @user_name.setter
-    def user_name(self, user_name):
-        if user_name == "" or type(user_name) is not str:
-            self._user_name = None
+    @username.setter
+    def username(self, username):
+        if username == "" or type(username) is not str:
+            self._username = None
         else:
-            self._user_name = user_name.strip().lower()
+            self._username = username.strip().title()
 
     @property
     def password(self) -> str:
@@ -68,21 +68,21 @@ class User:
                 self._time_spent_watching_movies_minutes = time_spent_watching_movies_minutes
 
     def __repr__(self):
-        return f'<User {self._user_name}>'
+        return f'<User {self._username.title()}>'
 
     def __eq__(self, other):
         if not isinstance(other, User):
             return False
         return (
-                other._user_name == self._user_name
+                other._username == self._username
         )
 
     def __lt__(self, other):
         if isinstance(other, User):
-            return ((self._user_name) < (other._user_name))
+            return ((self._username) < (other._username))
 
     def __hash__(self):
-        ty = str(self._user_name)
+        ty = str(self._username)
         return hash(ty)
 
     def watch_movie(self, movie: 'Movie'):
@@ -213,6 +213,12 @@ class Movie:
     def reviews(self, reviews:Iterable['Review']):
         self._reviews = reviews
 
+    def is_genred_by(self, genre: 'Genre'):
+        return (genre in self._genres)
+
+    def is_genred(self) -> bool:
+        return len(self._genres) > 0
+
     def number_of_genres(self) -> int:
         return len(self._genres)
 
@@ -229,11 +235,11 @@ class Movie:
             if actor in self._actors:
                 self._actors.remove(actor)
 
-    def add_genre(self, genre: Genre):
+    def add_genre(self, genre: 'Genre'):
         if isinstance(genre, Genre):
             self._genres.append(genre)
 
-    def remove_genre(self, genre: Genre):
+    def remove_genre(self, genre: 'Genre'):
         if isinstance(genre, Genre):
             if genre in self._genres:
                 self._genres.remove(genre)
@@ -349,6 +355,53 @@ class Review:
         )
 
 
+class Genre:
+    def __init__(
+            self, genre_name: str,
+    ):
+        self._genre_name: str = genre_name
+        self._genreged_movies: List[Movie] = list()
+
+    @property
+    def genre_name(self) -> str:
+        return self._genre_name
+
+    @property
+    def genreged_movies(self) -> list:
+        return self._genreged_movies
+
+    # @property
+    # def genreged_movies(self, ) -> str:
+    #     return self._genre_name
+
+    def is_applied_to(self, movie: Movie) -> bool:
+        return movie in self._genreged_movies
+
+    @property
+    def number_of_genred_movies(self) -> int:
+        return len(self._genred_movies)
+
+    def __repr__(self):
+        if not self._genre_name:
+            return f'<Genre None>'
+        else:
+            return f'<Genre {self._genre_name}>'
+
+    def __eq__(self, other):
+        if not isinstance(other, Genre):
+            return False
+        return (
+                other._genre_name == self._genre_name
+        )
+
+    def __lt__(self, other):
+        return self._genre_name < other._genre_name
+
+    def __hash__(self):
+        return hash(self._genre_name)
+
+
+
 
 class ModelException(Exception):
     pass
@@ -360,4 +413,11 @@ def make_review(review_text: str, user: User, movie: Movie, timestamp: datetime 
     movie.add_review(review)
 
     return review
+
+def make_genre_association(movie: Movie, genre: Genre):
+    if genre.is_applied_to(movie):
+        raise ModelException(f'genre {genre.genre_name} already applied to movie "{movie.title}"')
+
+    movie.add_genre(genre)
+    genre.add_movie(movie)
 

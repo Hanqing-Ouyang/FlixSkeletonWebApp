@@ -9,8 +9,8 @@ from werkzeug.security import generate_password_hash
 # from movie_web_app.domainmodel.movie import Movie
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.model import User,Review,Movie,make_review
+# from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import User,Review,Movie,make_review,Genre
 # from movie_web_app.domainmodel.review import Review
 from movie_web_app.adapters.repository import AbstractRepository, RepositoryException
 from movie_web_app.datafilereaders.movie_file_csv_reader import MovieFileCSVReader

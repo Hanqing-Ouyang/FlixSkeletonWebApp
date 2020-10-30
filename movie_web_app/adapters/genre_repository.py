@@ -1,7 +1,7 @@
 import abc
 from typing import List
 
-from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import Genre
 
 repo_genres = None
 

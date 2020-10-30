@@ -1,7 +1,7 @@
 import csv
 from movie_web_app.domainmodel.model import Movie
 from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import Genre
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.read_title import read_title
 

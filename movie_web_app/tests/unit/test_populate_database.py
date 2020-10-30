@@ -23,7 +23,26 @@ def test_database_populate_select_all_genres(database_engine):
         for row in result:
             all_genre_names.append(row['genre_name'])
 
-        assert all_genre_names == ['New Zealand', 'Health', 'World', 'Politics', 'Travel', 'Entertainment', 'Business', 'Sport', 'Lifestyle', 'Opinion']
+        assert all_genre_names == ['Action',
+ 'Adventure',
+ 'Sci-Fi',
+ 'Mystery',
+ 'Horror',
+ 'Thriller',
+ 'Animation',
+ 'Comedy',
+ 'Family',
+ 'Fantasy',
+ 'Drama',
+ 'Music',
+ 'Biography',
+ 'Romance',
+ 'History',
+ 'Crime',
+ 'Western',
+ 'War',
+ 'Musical',
+ 'Sport']
 
 def test_database_populate_select_all_users(database_engine):
 
@@ -46,7 +65,7 @@ def test_database_populate_select_all_reviews(database_engine):
 
     # Get table information
     inspector = inspect(database_engine)
-    name_of_reviews_table = inspector.get_table_names()[2]
+    name_of_reviews_table = inspector.get_table_names()[3]
 
     with database_engine.connect() as connection:
         # query for records in table reviews
@@ -55,6 +74,7 @@ def test_database_populate_select_all_reviews(database_engine):
 
         all_reviews = []
         for row in result:
+            # print(row)
             all_reviews.append((row['id'], row['user_id'], row['movie_id'], row['review_text']))
 
         assert all_reviews == [(1, 2, 1, 'Oh no, COVID-19 has hit New Zealand'),
@@ -65,7 +85,7 @@ def test_database_populate_select_all_movies(database_engine):
 
     # Get table information
     inspector = inspect(database_engine)
-    name_of_movies_table = inspector.get_table_names()[1]
+    name_of_movies_table = inspector.get_table_names()[2]
 
     with database_engine.connect() as connection:
         # query for records in table movies
@@ -78,8 +98,8 @@ def test_database_populate_select_all_movies(database_engine):
 
         nr_movies = len(all_movies)
 
-        assert all_movies[0] == (1, 'Coronavirus: First case of virus in New Zealand')
-        assert all_movies[nr_movies//2] == (89, 'Covid 19 coronavirus: Queen to make speech urging Britain to rise to the unprecedented challenges of pandemic')
-        assert all_movies[nr_movies-1] == (177, 'Covid 19 coronavirus: Kiwi mum on the heartbreak of losing her baby in lockdown')
+        assert all_movies[0] == (1, 'Guardians of the Galaxy')
+        assert all_movies[nr_movies//2] == (501, 'Maze Runner: The Scorch Trials')
+        assert all_movies[nr_movies-1] == (1000, 'Nine Lives')
 
 

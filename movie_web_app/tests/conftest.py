@@ -41,6 +41,9 @@ def database_engine():
     for table in reversed(metadata.sorted_tables):  # Remove any data from the tables.
         engine.execute(table.delete())
     map_model_to_tables()
+    # data_filename = 'Data1000Movies.csv'
+    # session_factory = sessionmaker(autocommit=False, autoflush=True, bind=engine)
+    # database_repository.populate_reader(session_factory, TEST_DATA_PATH_DATABASE, data_filename)
     database_repository.populate(engine, TEST_DATA_PATH_DATABASE)
     yield engine
     metadata.drop_all(engine)
@@ -67,6 +70,9 @@ def session():
         engine.execute(table.delete())
     map_model_to_tables()
     session_factory = sessionmaker(bind=engine)
+    # data_filename = 'Data1000Movies.csv'
+    # # session_factory = sessionmaker(autocommit=False, autoflush=True, bind=engine)
+    # database_repository.populate_reader(session_factory, TEST_DATA_PATH_DATABASE, data_filename)
     database_repository.populate(engine, TEST_DATA_PATH_DATABASE)
     yield session_factory()
     metadata.drop_all(engine)
@@ -81,6 +87,9 @@ def session_factory():
         engine.execute(table.delete())
     map_model_to_tables()
     session_factory = sessionmaker(bind=engine)
+    # data_filename = 'Data1000Movies.csv'
+    # # session_factory = sessionmaker(autocommit=False, autoflush=True, bind=engine)
+    # database_repository.populate_reader(session_factory, TEST_DATA_PATH_DATABASE, data_filename)
     database_repository.populate(engine, TEST_DATA_PATH_DATABASE)
     yield session_factory
     metadata.drop_all(engine)

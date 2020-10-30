@@ -1,4 +1,4 @@
-from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import Genre
 from movie_web_app.domainmodel.actor import Actor
 from movie_web_app.domainmodel.director import Director
 # from movie_web_app.domainmodel.user import Review

@@ -6,8 +6,8 @@ import pytest
 # from movie_web_app.domainmodel.movie import
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.model import User,Review, make_review, Movie
+# from movie_web_app.domainmodel.genre import
+from movie_web_app.domainmodel.model import User,Review, make_review, Movie, Genre
 # from movie_web_app.domainmodel.review import
 from movie_web_app.adapters.repository import RepositoryException
 

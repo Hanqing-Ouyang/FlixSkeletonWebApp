@@ -1,6 +1,6 @@
-from movie_web_app.A1Files.user import User,Review,Movie
+# from movie_web_app.A1Files.user import User,Review,Movie
 from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import Genre,User,Review,Movie
 from movie_web_app.domainmodel.director import Director
 
 

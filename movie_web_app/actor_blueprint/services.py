@@ -1,8 +1,8 @@
 from typing import List, Iterable
 
 from movie_web_app.adapters.repository import AbstractRepository
-from movie_web_app.domainmodel.model import User,Review,Movie ,make_review
-from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import User,Review,Movie ,make_review,Genre
+# from movie_web_app.domainmodel.genre import Genre
 import movie_web_app.adapters.repository as repo
 
 

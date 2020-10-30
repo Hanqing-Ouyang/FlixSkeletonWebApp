@@ -6,7 +6,7 @@ from sqlalchemy.orm import mapper, relationship
 
 from movie_web_app.domainmodel import director
 from movie_web_app.domainmodel import actor
-from movie_web_app.domainmodel import genre
+# from movie_web_app.domainmodel import genre
 from movie_web_app.domainmodel import model
 
 metadata = MetaData()
@@ -31,10 +31,10 @@ movies = Table(
     'movies', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('title', String(255), nullable=False),
-    Column('genres', String(255), nullable=False),
+    # Column('genres', String(255), nullable=True),
     Column('description', String(255), nullable=False),
-    Column('director', String(255), nullable=True),
-    Column('actors', String(1024), nullable=True),
+    # Column('director', String(255), nullable=True),
+    # Column('actors', String(1024), nullable=True),
     Column('year', Integer, nullable=False),
     # Column('Runtime (Minutes)', Integer, nullable=True),
     # Column('Rating', Integer, nullable=True),
@@ -93,17 +93,9 @@ def map_model_to_tables():
         '_review_text': reviews.columns.review_text,
         '_timestamp': reviews.columns.timestamp
     })
-    mapper(model.Movie, movies, properties={
-        '_year': movies.columns.year,
-        '_title': movies.columns.title,
-        '_id': movies.columns.id,
-        '_description':movies.columns.description,
-        '_reviews': relationship(model.Review, backref='_movie'),
-        '_actors' : movies.columns.actors,
-        '_director': movies.columns.director,
-    })
 
-    mapper(genre.Genre, genres, properties={
+
+    genres_mapper = mapper(model.Genre, genres, properties={
         '_genre_name': genres.columns.genre_name,
         # '_genreged_movies': relationship(
         #     movies_mapper,
@@ -111,6 +103,23 @@ def map_model_to_tables():
         #     backref="_genres"
         # )
     })
+
+    mapper(model.Movie, movies, properties={
+        '_year': movies.columns.year,
+        '_title': movies.columns.title,
+        '_id': movies.columns.id,
+        '_description': movies.columns.description,
+        '_genres': relationship(
+            genres_mapper,
+            secondary=movie_genres,
+            backref='_genred_movies'
+        ),
+        '_reviews': relationship(model.Review, backref='_movie'),
+        # '_actors' : movies.columns.actors,
+        # '_director': movies.columns.director,
+    })
+
+
     # mapper(actor.Actor, actors, properties={
     #     '_actor_full_name': actors.c.actor_full_name,
     #     '_movie_actors': relationship(

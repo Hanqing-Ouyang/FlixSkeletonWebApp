@@ -64,11 +64,11 @@ def create_app(test_config=None):
             repo.repo_instance = movie_repository.MainRepository()
             movie_repository.populate(data_path, repo.repo_instance)
 
-            database_repository.populate(database_engine, data_path)
-            data_filename='Data1000Movies.csv'
             # data_filename = '/Users/takesei/Documents/GitHub/FlixSkeletonWebApp/movie_web_app/datafiles/Data1000Movies.csv'
-            session_factory= sessionmaker(autocommit=False, autoflush= True,bind=database_engine)
-            database_repository.populate_reader(session_factory, data_path, data_filename)
+            # data_filename = 'Data1000Movies.csv'
+            # session_factory= sessionmaker(autocommit=False, autoflush= True,bind=database_engine)
+            # database_repository.populate_reader(session_factory, data_path, data_filename)
+            database_repository.populate(database_engine, data_path)
 
         else:
             # Solely generate mappings that map domain model classes to the database tables.

@@ -13,8 +13,8 @@ from flask import _app_ctx_stack
 
 from movie_web_app.domainmodel.director import Director
 from movie_web_app.domainmodel.actor import Actor
-from movie_web_app.domainmodel.genre import Genre
-from movie_web_app.domainmodel.model import User,Review,Movie,make_review
+# from movie_web_app.domainmodel.genre import Genre
+from movie_web_app.domainmodel.model import User,Review,Movie,make_review,Genre
 from movie_web_app.adapters.repository import AbstractRepository
 from movie_web_app.datafilereaders.movie_file_csv_reader import MovieFileCSVReader
 
@@ -87,7 +87,7 @@ class SqlAlchemyRepository(AbstractRepository):
     def get_movie(self, id: int) -> Movie:
         movie = None
         try:
-            movie = self._session_cm.session.query(movie).filter(movie._id == id).one()
+            movie = self._session_cm.session.query(Movie).filter(Movie._id == id).one()
         except NoResultFound:
             # Ignore any exception and return None.
             pass
@@ -100,7 +100,7 @@ class SqlAlchemyRepository(AbstractRepository):
             return movies
         else:
             # Return movies matching target_year; return an empty list if there are no matches.
-            movies = self._session_cm.session.query(Movie).filter(Movie.year == target_year).all()
+            movies = self._session_cm.session.query(Movie).filter(Movie._year == target_year).all()
             return movies
 
     def get_number_of_movies(self):
@@ -112,18 +112,18 @@ class SqlAlchemyRepository(AbstractRepository):
         return movie
 
     def get_last_movie(self):
-        movie = self._session_cm.session.query(Movie).order_by(desc(Movie.id)).first()
+        movie = self._session_cm.session.query(Movie).order_by(desc(Movie._id)).first()
         return movie
 
     def get_movies_by_id(self, id_list):
-        movies = self._session_cm.session.query(Movie).filter(Movie.id.in_(id_list)).all()
+        movies = self._session_cm.session.query(Movie).filter(Movie._id.in_(id_list)).all()
         return movies
 
     def get_movie_ids_for_genre(self, genre_name: str):
         movie_ids = []
 
         # Use native SQL to retrieve movie ids, since there is no mapped class for the movie_genres table.
-        row = self._session_cm.session.execute('SELECT id FROM genres WHERE name = :genre_name', {'genre_name': genre_name}).fetchone()
+        row = self._session_cm.session.execute('SELECT id FROM genres WHERE genre_name = :genre_name', {'genre_name': genre_name}).fetchone()
 
         if row is None:
             # No genre with the name genre_name - create an empty list.
@@ -142,7 +142,7 @@ class SqlAlchemyRepository(AbstractRepository):
 
     def get_year_of_previous_movie(self, movie: Movie):
         result = None
-        prev = self._session_cm.session.query(movie).filter(movie._year < movie.year).order_by(desc(movie._year)).first()
+        prev = self._session_cm.session.query(Movie).filter(Movie._year < movie.year).order_by(desc(Movie._year)).first()
 
         if prev is not None:
             result = prev.year
@@ -151,7 +151,7 @@ class SqlAlchemyRepository(AbstractRepository):
 
     def get_year_of_next_movie(self, movie: Movie):
         result = None
-        next = self._session_cm.session.query(movie).filter(movie._year > movie.year).order_by(asc(movie._year)).first()
+        next = self._session_cm.session.query(Movie).filter(Movie._year > movie.year).order_by(asc(Movie._year)).first()
 
         if next is not None:
             result = next.year
@@ -313,7 +313,8 @@ def movie_record_generator(filename: str):
             movie_data = [item.strip() for item in movie_data]
 
             # number_of_genres = len(movie_data) - 6
-            movie_genres = movie_data[2]
+            movie_genres = movie_data[2].split(",")
+            # print(movie_data[2])
             movie_description= movie_data[3]
 
             # Add any new genres; associate the current movie with genres.
@@ -321,8 +322,17 @@ def movie_record_generator(filename: str):
                 if genre not in genres.keys():
                     genres[genre] = list()
                 genres[genre].append(movie_key)
+            # print(genres)
 
             # del movie_data[2]
+            # print(len(movie_data))
+
+            # print(movie_data)
+            del movie_data[2],movie_data[4], movie_data[5],movie_data[7:]
+            del movie_data[3],movie_data[4:]
+            # movie_data[2], movie_data[4], movie_data[5], movie_data[7],,movie_data[11],movie_data[10],movie_data[9]
+            # print(movie_data[3])
+            # print(movie_data)
 
             yield movie_data
 
@@ -334,6 +344,7 @@ def get_genre_records():
     for genre in genres.keys():
         genre_key = genre_key + 1
         genre_records.append((genre_key, genre))
+    print("this is the genre",genre_records)
     return genre_records
 
 
@@ -362,6 +373,7 @@ def generic_generator(filename, post_process=None):
 
             if post_process is not None:
                 row = post_process(row)
+            print(row)
             yield row
 
 
@@ -377,23 +389,24 @@ def populate(engine: Engine, data_path: str):
     global genres
     genres = dict()
 
-    # insert_movies = """
-    #     INSERT INTO movies (
-    #     id, title, genres, description, director, actors, year)
-    #     VALUES (?, ?, ?, ?, ?, ?, ?)"""
-    # cursor.executemany(insert_movies, movie_record_generator(os.path.join(data_path, 'Data1000Movies.csv')))
-    # # , Runtime (Minutes), Rating,Votes, Revenue (Millions),Metascore
-    insert_genres = """
-        INSERT INTO genres (
-        id, genre_name)
-        VALUES (?, ?)"""
-    cursor.executemany(insert_genres, get_genre_records())
+    insert_movies = """
+        INSERT INTO movies (
+        id, title, description, year)
+        VALUES (?, ?, ?, ?)"""
+    cursor.executemany(insert_movies, movie_record_generator(os.path.join(data_path, 'Data1000Movies.csv')))
+    #  director, actors, Runtime (Minutes), Rating,Votes, Revenue (Millions),Metascore
 
-    insert_movie_genres = """
-        INSERT INTO movie_genres (
-        id, movie_id, genre_id)
-        VALUES (?, ?, ?)"""
-    cursor.executemany(insert_movie_genres, movie_genres_generator())
+    insert_genres = """
+            INSERT INTO genres (
+            id, genre_name)
+            VALUES (?, ?)"""
+    cursor.executemany(insert_genres, get_genre_records())
+    #
+    # insert_movie_genres = """
+    #         INSERT INTO movie_genres (
+    #         id, movie_id, genre_id)
+    #         VALUES (?, ?, ?)"""
+    # cursor.executemany(insert_movie_genres, movie_genres_generator())
 
     insert_users = """
         INSERT INTO users (
@@ -406,7 +419,7 @@ def populate(engine: Engine, data_path: str):
         id, user_id, movie_id, review_text, timestamp)
         VALUES (?, ?, ?, ?, ?)"""
     cursor.executemany(insert_reviews, generic_generator(os.path.join(data_path, 'comments.csv')))
-
+    # print(genres)
     conn.commit()
     conn.close()
 
